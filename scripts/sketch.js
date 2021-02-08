@@ -1,5 +1,5 @@
 let game = {
-    state: 0
+    state: 1
 }
 
 let pg = {
@@ -12,7 +12,7 @@ let pg = {
 
 function setup() {
     console.log("Hello World!");
-    createCanvas(pg.w, pg.h);
+    createCanvas(pg.w, pg.h).parent("pg");
 
     for (let i = 0; i < pg.col; i++) {
         let colors = [];
