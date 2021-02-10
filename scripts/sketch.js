@@ -3,10 +3,10 @@ let game = {
 }
 
 let pg = {
-    w: 600,
+    w: 800,
     h: 600,
     row: 3,
-    col: 3,
+    col: 4,
     colors: [],
 }
 
@@ -54,8 +54,6 @@ function draw() {
             hoverCell(...blockIndex(mouseX, mouseY));
         }
     }
-
-    
 }
 
 function blockIndex(x, y) {
