@@ -10,7 +10,7 @@ let pg = {
 }
 
 function setup() {
-   
+
     createCanvas().parent("pg");
 
     // calculate suitable w/h && c/r
@@ -21,31 +21,26 @@ function setup() {
     const ph = Math.min(playground.clientHeight, pg.bs * 4 + 50);
     const pw = Math.min(playground.clientWidth, pg.bs * 4 + 50);
 
-    pg.col = parseInt(pw / pg.bs)
-    pg.row = parseInt(ph / pg.bs)
+    pg.cols = parseInt(pw / pg.bs)
+    pg.rows = parseInt(ph / pg.bs)
 
     if (pw % pg.bs < 50) {
-        pg.col -= 1
+        pg.cols -= 1
     }
     if (ph % pg.bs < 50) {
-        pg.row -= 1
+        pg.rows -= 1
     }
 
-    pg.w = pg.col * pg.bs;
-    pg.h = pg.row * pg.bs;
+    pg.w = pg.cols * pg.bs;
+    pg.h = pg.rows * pg.bs;
 
     resizeCanvas(pg.w, pg.h);
 
-    pg.colors = [];
-    for (let i = 0; i < pg.col; i++) {
-        let colors = [];
-        for (let j = 0; j < pg.row; j++) {
-            let r = parseInt(Math.random() * 255);
-            let g = parseInt(Math.random() * 255);
-            let b = parseInt(Math.random() * 255);
-            colors.push({ r, g, b });
+    pg.boxes = [];
+    for (let i = 0; i < pg.rows; i++) {
+        for (let j = 0; j < pg.cols; j++) {
+            pg.boxes.push(new Box(i, j, pg.bs));
         }
-        pg.colors.push(colors);
     }
 }
 
@@ -63,26 +58,27 @@ function draw() {
 
     if (game.state == 1) {
 
-        for (let i = 0; i < pg.col; i++) {
-            for (let j = 0; j < pg.row; j++) {
-                applyColor(j, i, pg.colors[i][j].r, pg.colors[i][j].g, pg.colors[i][j].b);
-            }
-        }
+        pg.boxes.forEach(b => {
+            b.draw();
+        });
 
         if (mouseX > 0 && mouseX < pg.w && mouseY > 0 && mouseY < pg.h) {
-            hoverCell(...blockIndex(mouseX, mouseY));
+            const index = blockIndex(mouseX, mouseY)
+            pg.boxes[index].glow();
         }
     }
 }
 
-function blockIndex(x, y) {
-    y = parseInt(mouseY / pg.h * pg.row);
-    x = parseInt(mouseX / pg.w * pg.col);
-    return [y, x];
+function blockIndex() {
+    const x = parseInt(mouseX / pg.bs);
+    const y = parseInt(mouseY / pg.bs);
+    let index = y * pg.cols + x;
+    return index;
 }
 
 function mousePressed() {
-    const pressedIndex = blockIndex(mouseX, mouseY);
-    if (!((pressedIndex[0] < pg.row && pressedIndex[0] > -1) && (pressedIndex[1] < pg.col && pressedIndex[1] > -1))) return
-
+    const index = blockIndex(mouseX, mouseY);
+    if (index < pg.boxes.length) {
+        pg.boxes[index].highlight()
+    }
 }
