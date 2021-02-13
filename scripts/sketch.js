@@ -1,19 +1,42 @@
 let game = {
-    state: 1
+    state: 1, // running
 }
 
+// 1: in game
+// 2: in resize
+
 let pg = {
-    w: 800,
-    h: 600,
-    row: 3,
-    col: 4,
-    colors: [],
+    boxSize: 200
 }
 
 function setup() {
-    console.log("Hello World!");
-    createCanvas(pg.w, pg.h).parent("pg");
+   
+    createCanvas().parent("pg");
 
+    // calculate suitable w/h && c/r
+    const playground = document.getElementById("pg");
+
+    pg.bs = playground.clientWidth < 500 ? 100 : 200;
+
+    const ph = Math.min(playground.clientHeight, pg.bs * 4 + 50);
+    const pw = Math.min(playground.clientWidth, pg.bs * 4 + 50);
+
+    pg.col = parseInt(pw / pg.bs)
+    pg.row = parseInt(ph / pg.bs)
+
+    if (pw % pg.bs < 50) {
+        pg.col -= 1
+    }
+    if (ph % pg.bs < 50) {
+        pg.row -= 1
+    }
+
+    pg.w = pg.col * pg.bs;
+    pg.h = pg.row * pg.bs;
+
+    resizeCanvas(pg.w, pg.h);
+
+    pg.colors = [];
     for (let i = 0; i < pg.col; i++) {
         let colors = [];
         for (let j = 0; j < pg.row; j++) {
@@ -24,25 +47,21 @@ function setup() {
         }
         pg.colors.push(colors);
     }
+}
 
+window.onresize = () => {
+    game.state = 2;
+    setup();
+    game.state = 1;
 }
 
 function draw() {
-    if(game.state == 0) {
+    // setup();
+    if (game.state == 0) {
         // start button..
     }
 
     if (game.state == 1) {
-        background(255, 0, 0);
-
-        // // rows
-        // for (let i = 1; i < pg.row; i++) {
-        //     line(0, i * pg.h / pg.row, pg.w, i * pg.h / pg.row);
-        // }
-        // // cols
-        // for (let i = 1; i < pg.col; i++) {
-        //     line(i * pg.w / pg.col, 0, i * pg.w / pg.col, pg.h);
-        // }
 
         for (let i = 0; i < pg.col; i++) {
             for (let j = 0; j < pg.row; j++) {
