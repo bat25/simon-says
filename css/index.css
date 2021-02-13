@@ -25,11 +25,12 @@ main {
 #tracker {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 8px;
     padding: 25px;
 }
 .animate {
-    animation: getAtn linear 1s 2 forwards;
+    animation: getAtn linear 300ms 2 forwards;
 }
 .hidden {
     background-color: gray !important;

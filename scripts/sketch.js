@@ -1,7 +1,7 @@
-let game = {
-    state: 1, // running
-}
-
+// let game = {
+//     state: 1, // running
+// }
+let game = new Game()
 // 1: in game
 // 2: in resize
 
@@ -10,7 +10,7 @@ let pg = {
 }
 
 function setup() {
-
+    game.refresh()
     createCanvas().parent("pg");
 
     // calculate suitable w/h && c/r
@@ -36,10 +36,10 @@ function setup() {
 
     resizeCanvas(pg.w, pg.h);
 
-    pg.boxes = [];
+    game.boxes = [];
     for (let i = 0; i < pg.rows; i++) {
         for (let j = 0; j < pg.cols; j++) {
-            pg.boxes.push(new Box(i, j, pg.bs));
+            game.boxes.push(new Box(i, j, pg.bs));
         }
     }
 }
@@ -58,27 +58,29 @@ function draw() {
 
     if (game.state == 1) {
 
-        pg.boxes.forEach(b => {
+        game.boxes.forEach(b => {
             b.draw();
         });
 
-        if (mouseX > 0 && mouseX < pg.w && mouseY > 0 && mouseY < pg.h) {
+        if (withinCanvas()) {
             const index = blockIndex(mouseX, mouseY)
-            pg.boxes[index].glow();
+            game.boxes[index].glow();
         }
     }
 }
 
+const withinCanvas = () => mouseX > 0 && mouseX < pg.w && mouseY > 0 && mouseY < pg.h
+
 function blockIndex() {
-    const x = parseInt(mouseX / pg.bs);
-    const y = parseInt(mouseY / pg.bs);
-    let index = y * pg.cols + x;
+    const col = parseInt(mouseX / pg.bs)
+    const row = parseInt(mouseY / pg.bs)
+    let index = row * pg.cols + col;
     return index;
 }
 
 function mousePressed() {
-    const index = blockIndex(mouseX, mouseY);
-    if (index < pg.boxes.length) {
-        pg.boxes[index].highlight()
+    if (withinCanvas()) {
+        const index = blockIndex(mouseX, mouseY);
+        game.boxes[index].highlight()
     }
 }

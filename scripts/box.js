@@ -43,9 +43,13 @@ class Box {
         strokeWeight(0);
         circle((this.col * this.size) + this.size / 2, (this.row * this.size) + this.size / 2, this.size * 0.9);
         pop();
-        setTimeout(() => {
-            this.highlighted = false
-        }, 300)
+
+        return new Promise((res, rej) => {
+            setTimeout(() => {
+                this.highlighted = false
+                res()
+            }, 300)
+        })
     }
 
     undraw() {
@@ -57,4 +61,5 @@ class Box {
         pop();
     }
 
+    highlightList() {}
 }
