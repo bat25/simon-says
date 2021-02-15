@@ -16,9 +16,21 @@
     <script src="./scripts/steptracker.js" defer></script>
 </head>
 <body>
+    <section id="menu">
+        <button id="start-game">Start</button>
+    </section>
     <main>
         <div id="pg"></div>
         <div id="tracker"></div>
     </main>
+
+    <script>
+        const startGame = document.getElementById("start-game")
+        startGame.addEventListener("click", () => {
+            startGame.parentElement.style.display = "none"
+            game = new Game();
+            state = 1;
+        })
+    </script>
 </body>
 </html>

@@ -20,6 +20,7 @@ main {
 #pg canvas {
     justify-self: center;
     align-self: center;
+    cursor: pointer;
 }
 
 #tracker {
@@ -28,6 +29,7 @@ main {
     flex-wrap: wrap;
     gap: 8px;
     padding: 25px;
+    height: 25px;
 }
 .animate {
     animation: getAtn linear 300ms 2 forwards;
@@ -49,4 +51,31 @@ main {
     100% {
         transform: scale3d(1, 1, 1);
     }
+}
+
+
+#menu {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    z-index: 2;
+    background-color: #fff;
+}
+
+#start-game {
+    padding: 1em 2em;
+    background-color: rgb(0, 79, 182);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+}
+#start-game:hover {
+    background-color: rgb(0, 96, 221);
 }

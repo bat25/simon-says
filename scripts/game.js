@@ -4,9 +4,9 @@ class Game {
 
         const playground = document.getElementById("pg")
         this.boxSize = playground.clientWidth < 500 ? 100 : 200;
-        
+
         /** @type {Number} Canvas Container Height */
-        const canvasContainerHeight = Math.min(playground.clientHeight, this.boxSize * 4 + 50);
+        const canvasContainerHeight = Math.min(playground.clientHeight, this.boxSize * 4 + 24);
         /** @type {Number} Canvas Container Width */
         const canvasContainerWidth = Math.min(playground.clientWidth, this.boxSize * 4 + 50);
 
@@ -18,7 +18,7 @@ class Game {
         if (canvasContainerWidth % this.boxSize < 50) {
             this.cols -= 1
         }
-        if (canvasContainerHeight % this.boxSize < 50) {
+        if (canvasContainerHeight % this.boxSize < 24) {
             this.rows -= 1
         }
 
@@ -37,7 +37,7 @@ class Game {
         }
         this.boxesInQueue.push(this.boxes[index])
         this.discsInTracker.push(new StepTracker(this.boxes[index]))
-        
+
         this.discsInTracker.forEach(bit => bit.show())
         for (let i = 0; i < this.boxesInQueue.length; i++) {
             await Promise.allSettled([
@@ -46,9 +46,12 @@ class Game {
             ])
         }
         this.discsInTracker.forEach(bit => bit.hide())
+        this.waitingForInput = true;
     }
 
-    refresh() {
+    async refresh() {
+        this.score = 0
+        this.indexTracker = 0;
         this.boxesInQueue = []
         document.getElementById("tracker").innerHTML = ""
         this.discsInTracker = []
@@ -57,6 +60,27 @@ class Game {
             for (let j = 0; j < this.cols; j++) {
                 this.boxes.push(new Box(i, j, this.boxSize));
             }
+        }
+        this.initialAddRound = setTimeout(this.addRound.bind(this), 2000)
+    }
+
+    destroy() {
+        clearTimeout(game.initialAddRound) 
+    }
+
+    async checkSelection(index) {
+        if(this.boxesInQueue[this.indexTracker] == this.boxes[index]) {
+            //selection correct
+            this.score++
+            this.indexTracker++
+            if(this.indexTracker == this.boxesInQueue.length) {
+                this.indexTracker = 0;
+                setTimeout(this.addRound.bind(this), 600)
+                // await this.addRound();
+            }
+            return true;
+        } else {
+            return false;
         }
     }
 }

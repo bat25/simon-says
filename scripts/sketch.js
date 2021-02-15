@@ -1,26 +1,22 @@
 let game;
 
 
-let state = 1;
-// let state;
+let state = 0;
+// 0: start menu
 // 1: in game
-// 2: in resize
 
 
-function setup() {
-    // state = 0;
-    game = new Game()
-}
+
 
 window.onresize = () => {
-    state = 2;
-    setup();
-    state = 1;
+    game.destroy()
+    game = new Game();
 }
 
 function draw() {
     if (state == 0) {
         // start button..
+        background(255);
     }
 
     if (state == 1) {
@@ -44,9 +40,16 @@ function blockIndex() {
     return index;
 }
 
-function mousePressed() {
-    if (withinCanvas()) {
+async function mousePressed() {
+    if (state == 1 && withinCanvas() && game.waitingForInput) {
         const index = blockIndex(mouseX, mouseY);
         game.boxes[index].highlight()
+        const success = await game.checkSelection(index);
+        console.log(success);
+        if (!success) {
+            alert("Out! Score is " + game.score)
+            game.destroy()
+            game = new Game()
+        }
     }
 }

@@ -47,7 +47,9 @@ class Box {
         return new Promise((res, rej) => {
             setTimeout(() => {
                 this.highlighted = false
-                res()
+                setTimeout(() => {
+                    res()
+                }, 200)
             }, 300)
         })
     }
