@@ -6,9 +6,9 @@ class Box {
         this.size = size;
         this.highlighted = false;
         this.color = [
-            parseInt(Math.random() * 255),
-            parseInt(Math.random() * 255),
-            parseInt(Math.random() * 255)
+            parseInt(Math.random() * 250),
+            parseInt(Math.random() * 250),
+            parseInt(Math.random() * 250)
         ]
     }
 
