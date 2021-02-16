@@ -36,13 +36,16 @@ class Game {
             index = rand([0, this.boxes.length - 1])
         }
         this.boxesInQueue.push(this.boxes[index])
-        this.discsInTracker.push(new StepTracker(this.boxes[index]))
+        // #1 this.discsInTracker.push(new StepTracker(this.boxes[index]))
 
-        this.discsInTracker.forEach(bit => bit.show())
         for (let i = 0; i < this.boxesInQueue.length; i++) {
+            // #1 immidiately added new disc to dom after presenting the older one. We do it here only at the time of showing
+            if (i == this.boxesInQueue.length - 1) {
+                this.discsInTracker.push(new StepTracker(this.boxes[index]))
+            }
             await Promise.allSettled([
                 this.boxesInQueue[i].highlight(),
-                this.discsInTracker[i].highlight()
+                this.discsInTracker[i].show().highlight()
             ])
         }
         this.discsInTracker.forEach(bit => bit.hide())
@@ -65,15 +68,17 @@ class Game {
     }
 
     destroy() {
-        clearTimeout(game.initialAddRound) 
+        clearTimeout(game.initialAddRound)
     }
 
     async checkSelection(index) {
-        if(this.boxesInQueue[this.indexTracker] == this.boxes[index]) {
+        if (this.boxesInQueue[this.indexTracker] == this.boxes[index]) {
             //selection correct
             this.score++
+            // console.log(this.indexTracker);
+            this.discsInTracker[this.indexTracker].show().highlight();
             this.indexTracker++
-            if(this.indexTracker == this.boxesInQueue.length) {
+            if (this.indexTracker == this.boxesInQueue.length) {
                 this.indexTracker = 0;
                 setTimeout(this.addRound.bind(this), 600)
                 // await this.addRound();

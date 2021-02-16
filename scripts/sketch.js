@@ -47,10 +47,10 @@ async function mousePressed() {
         const success = await game.checkSelection(index);
         console.log(success);
         if (!success) {
-            // alert("Out! Score is " + game.score)
             document.getElementById("score").innerHTML = `You Are Out! Your Score is <b>${game.score}</b>`
             startGame.parentElement.style.display = "flex"
             game.destroy()
+            return;
         }
     }
 }

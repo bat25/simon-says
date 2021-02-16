@@ -8,6 +8,7 @@ class StepTracker {
         this.div.style.width = "25px"
         this.div.style.height = "25px"
         this.div.style.borderRadius = "50%"
+        this.hide()
         trackerDOM.appendChild(this.div)
     }
 
@@ -16,16 +17,18 @@ class StepTracker {
         return new Promise((res, rej) => {
             setTimeout(() => {
                 this.div.classList.remove("animate")
-                res()
+                res(this)
             }, 300)
         })
     }
 
     hide() {
         this.div.classList.add("hidden")
+        return this
     }
 
     show() {
         this.div.classList.remove("hidden")
+        return this;
     }
 }
